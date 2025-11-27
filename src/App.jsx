@@ -6,7 +6,7 @@ function App() {
   return (
     <>
       <h1>Invenadro</h1>
-      <Form />
+      {/* <Form /> */}
       <CsvTable />
     </>
   )

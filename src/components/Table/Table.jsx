@@ -1,10 +1,15 @@
 import React, { useState } from "react";
+import Table from "react-bootstrap/Table";
 import "./TableStyles.css";
 import Papa from "papaparse";
 
 const CsvTable = () => {
   const [data, setData] = useState([]);
   const [filter, setFilter] = useState("");
+
+  // PAGINACIÓN
+  const [currentPage, setCurrentPage] = useState(1);
+  const rowsPerPage = 10;
 
   const processDataCsv = (e) => {
     const file = e.target.files[0];
@@ -14,43 +19,65 @@ const CsvTable = () => {
       skipEmptyLines: true,
       complete: (result) => {
         setData(result.data);
+        setCurrentPage(1);
       }
     });
   };
 
+  // FILTRO
   const filteredData = data.filter(row =>
     Object.values(row).some(value =>
       value?.toString().toLowerCase().includes(filter.toLowerCase())
     )
   );
-      console.log("data",data);
 
-      console.log("filteredData",filteredData);
+  // PAGINACIÓN LÓGICA
+  const indexOfLastRow = currentPage * rowsPerPage;
+  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+  const currentRows = filteredData.slice(indexOfFirstRow, indexOfLastRow);
+  const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+
+  const handlePrev = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  };
+
+  const handleNext = () => {
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+  };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>Cargar CSV y filtrar</h2>
+    <div>
 
       <input type="file" accept=".csv" onChange={processDataCsv} />
 
       <br /><br />
 
-      <input
-        type="text"
-        placeholder="Filtrar..."
-        value={filter}
-        onChange={(e) => setFilter(e.target.value)}
-      />
+      <div>
+        <input
+          type="text"
+          placeholder="Buscar..."
+          value={filter}
+          onChange={(e) => {
+            setFilter(e.target.value);
+            setCurrentPage(1);
+          }}
+        />
+      </div>
+
       <br /><br />
-      <table hover className="table">
+
+      <Table hover className="table">
         <thead>
           <tr>
             {data[0] &&
-              Object.keys(data[0]).map((col) => <th className="header-table" key={col}>{col}</th>)}
+              Object.keys(data[0]).map((col) => (
+                <th className="header-table" key={col}>{col}</th>
+              ))}
           </tr>
         </thead>
+
         <tbody>
-          {filteredData.map((row, i) => (
+          {currentRows.map((row, i) => (
             <tr key={i}>
               {Object.values(row).map((val, j) => (
                 <td key={j}>{val}</td>
@@ -58,7 +85,39 @@ const CsvTable = () => {
             </tr>
           ))}
         </tbody>
-      </table>
+      </Table>
+
+      {/* PAGINACIÓN */}
+      {data.length === 0 ? <></>
+      :
+      <div className="pagination">
+        <button 
+          onClick={handlePrev}
+          disabled={currentPage === 1}
+          className="prev-next-btn"
+          >
+          ⬅ Anterior
+        </button>
+
+        {Array.from({ length: totalPages }).map((_, i) => (
+          <button
+          key={i + 1}
+          onClick={() => setCurrentPage(i + 1)}
+            className={currentPage === i + 1 ? "active-page" : ""}
+            >
+            {i + 1}
+          </button>
+        ))}
+
+        <button 
+          onClick={handleNext}
+          disabled={currentPage === totalPages}
+          className="prev-next-btn"
+          >
+          Siguiente ➡
+        </button>
+      </div>
+      }
     </div>
   );
 };
