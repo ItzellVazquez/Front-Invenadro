@@ -9,7 +9,7 @@ function App() {
 
   return (
     <>
-    <Container fluid className="p-3">
+    <Container fluid className="mt-5 p-3">
       <Row className="text-center align-items-center">
         <Col className="d-flex justify-content-start">
           <img src="src/assets/InveNadro.svg" alt="InveNadro Logo" width="45" />

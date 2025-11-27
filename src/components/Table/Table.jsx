@@ -13,6 +13,7 @@ const CsvTable = () => {
   const [searchText, setSearchText] = useState("");
   const allowedColumns = ["SKU","Descripcion","MATL_GRP_5","Precio_Farmacia"];
   const [currentPage, setCurrentPage] = useState(1);
+  const [customerData, setCustomerData] = useState([]);
   const rowsPerPage = 10;
 
   const columnMap = {
@@ -29,6 +30,17 @@ const CsvTable = () => {
       header: true,
       skipEmptyLines: true,
       complete: (results) => {
+
+         console.log("AQUI EL ROW MASTER:", results.data[0]);
+            setCustomerData(prev => ({
+              ...prev,
+              customerId: results.data[0].CFG_CLIENTE_SAP,
+              date: new Date(
+                `${results.data[0].CALDAY.toString().slice(0, 4)}-${results.data[0].CALDAY.toString().slice(4, 6)}-${results.data[0].CALDAY.toString().slice(6, 8)}`
+              ).toLocaleDateString("es-MX", { day: "numeric", month: "long", year: "numeric" })
+            }));
+
+
 
         const trimmedData = results.data.map(row =>
           allowedColumns.reduce((acc, col) => {
@@ -54,16 +66,10 @@ const CsvTable = () => {
             return acc;
           }, {})
         );
-
-
-        console.log("DATA FINAL:", trimmedData);
-
         setData(trimmedData);
       }
     });
   };
-
-  console.log("aqui los resultados", data)
 
   const filteredData = data.filter((row) =>
     Object.values(row).some((value) =>
@@ -84,17 +90,21 @@ const CsvTable = () => {
     if (currentPage < totalPages) setCurrentPage(currentPage + 1);
   };
 
-  const visibleColumns = data[0]
-  ? Object.keys(data[0]).filter(col => allowedColumns.includes(col))
-  : [];
-
-  console.log("Columnas visibles:", visibleColumns);
+  console.log("Customer Data:", customerData);
 
 
 return (
   <>
-    {/* PROCESAR - CONTENEDOR CENTRAL DE 1200px */}
-    <Container fluid className="p-3">
+    
+    <Container fluid>
+      <Row className="justify-content-center">
+        {data.length > 0 && (
+          <p className="customer-info">
+            {customerData.customerId || "N/A"} — Actualizado el {customerData.date || "N/A"}
+          </p>
+        )}
+
+      </Row>
       <Row className="justify-content-center">
         <Col xs="12">
           <div className="mx-auto">
@@ -109,7 +119,6 @@ return (
       </Row>
     </Container>
 
-    {/* SOLO SI HAY DATOS */}
     {data.length > 0 && (
       <Container fluid className="p-3">
 
