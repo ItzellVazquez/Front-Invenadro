@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Table from 'react-bootstrap/Table'
+import "./TableStyles.css";
 import Papa from "papaparse";
 
 const CsvTable = () => {
@@ -42,11 +42,11 @@ const CsvTable = () => {
         onChange={(e) => setFilter(e.target.value)}
       />
       <br /><br />
-      <Table bordered hover>
+      <table hover className="table">
         <thead>
           <tr>
             {data[0] &&
-              Object.keys(data[0]).map((col) => <th key={col}>{col}</th>)}
+              Object.keys(data[0]).map((col) => <th className="header-table" key={col}>{col}</th>)}
           </tr>
         </thead>
         <tbody>
@@ -58,7 +58,7 @@ const CsvTable = () => {
             </tr>
           ))}
         </tbody>
-      </Table>
+      </table>
     </div>
   );
 };
