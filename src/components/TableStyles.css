@@ -29,19 +29,22 @@
     border: 1px solid #9CA3AF;
     border-radius: 10px;
 }
-.btn-pagination-active{
+.btn-pagination-active,
+.btn-pagination-active:hover{
+  max-height: 40px;
   background-color: #55873C;
   color: #ffffff;
 }
-.btn-pagination-active:hover{
-  background-color: #ffffff;
-  color: #55873C;
-  border: 1px solid #55873C;
-}
-.btn-pagination-inactive{
+.btn-pagination-inactive,
+  .btn-pagination-inactive :hover{
   color: #374151;
 }
 .btn-arrow{
   background-color: #ffffff;
-  color: #55873C;
+  color: #55873C !important;
+  font-weight: bolder;
+}
+.btn-arrow:disabled{
+  border-color: transparent !important;
+  opacity: 50%;
 }
