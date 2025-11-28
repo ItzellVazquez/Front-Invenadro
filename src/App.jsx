@@ -15,11 +15,11 @@ function App() {
         </Col>
 
         <Col className="d-flex justify-content-center">
-          <h1>InveNadro</h1>
+          <h1 class>InveNadro - Tradicional</h1>
         </Col>
 
         <Col className="d-flex justify-content-end">
-          <img src="data/textInveNgitadro.svg" alt="textInveNadro Logo" width="200" />
+          <img src="data/textInveNadro.svg" alt="textInveNadro Logo" width="200" />
         </Col>
       </Row>
     </Container>

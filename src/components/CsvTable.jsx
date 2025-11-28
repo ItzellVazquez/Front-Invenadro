@@ -24,13 +24,15 @@ const CsvTable = () => {
 
   const rowsPerPage = 10;
 
-  const allowedColumns = ["SKU", "Descripcion", "MATL_GRP_5", "Precio_Farmacia"];
+  const allowedColumns = ["SKU", "Descripcion", "CATEGORIA_MATERIALES", "Precio_Farmacia", "PIEZAS_PRONOSTICO", "PRONOSTICO"];
 
   const columnMap = {
     SKU: "EAN",
     Descripcion: "Descripción",
-    MATL_GRP_5: "Categoría",
+    CATEGORIA_MATERIALES: "Categoría",
     Precio_Farmacia: "Precio $",
+    PIEZAS_PRONOSTICO: "Óptimo",
+    PRONOSTICO: "Total",
   };
 
   const processData = () => {
@@ -39,6 +41,7 @@ const CsvTable = () => {
       header: true,
       skipEmptyLines: true,
       complete: (results) => {
+        console.log("Resultados",results.data[0])
         setCustomerData({
           customerId: results.data[0].CFG_CLIENTE_SAP,
           date: new Date(
@@ -55,7 +58,7 @@ const CsvTable = () => {
             const newKey = columnMap[col] || col;
             let value = row[col];
 
-            if (col === "Precio_Farmacia") {
+            if (col === "Precio_Farmacia" || col === "PRONOSTICO") {
               const num = Number(value);
               value = !isNaN(num)
                 ? new Intl.NumberFormat("es-MX", {
@@ -122,6 +125,8 @@ const CsvTable = () => {
       setCurrentPage(1);
     }
   }, [currentPage, totalPages]);
+
+  console.log(data)
 
 
   return (
