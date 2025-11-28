@@ -1,27 +1,44 @@
-const PriceRangeFilter = ({ priceRange, setPriceRange, setCurrentPage }) => (
-  <div className="filter-range">
-    <input
-      type="number"
-      placeholder="Desde"
-      value={priceRange.min}
-      onChange={(e) => {
-        setPriceRange((prev) => ({ ...prev, min: Number(e.target.value) }));
-        setCurrentPage(1);
-      }}
-    />
+const PriceRangeFilter = ({ priceRange, setPriceRange, setCurrentPage }) => {
+  const handleMinChange = (e) => {
+    const value = e.target.value;
 
-    <span className="separator">-</span>
+    // Solo números (o vacío)
+    if (/^\d*$/.test(value)) {
+      setPriceRange((prev) => ({ ...prev, min: value === "" ? 0 : Number(value) }));
+      setCurrentPage(1);
+    }
+  };
 
-    <input
-      type="number"
-      placeholder="Hasta"
-      value={priceRange.max}
-      onChange={(e) => {
-        setPriceRange((prev) => ({ ...prev, max: Number(e.target.value) }));
-        setCurrentPage(1);
-      }}
-    />
-  </div>
-);
+  const handleMaxChange = (e) => {
+    const value = e.target.value;
+
+    if (/^\d*$/.test(value)) {
+      setPriceRange((prev) => ({ ...prev, max: value === "" ? 0 : Number(value) }));
+      setCurrentPage(1);
+    }
+  };
+
+  return (
+    <div className="filter-range">
+      <input
+        className="input-search-range"
+        type="text"
+        placeholder="Desde $"
+        value={priceRange.min === 0 ? "" : priceRange.min}
+        onChange={handleMinChange}
+      />
+
+      <span className="separator">⟶</span>
+
+      <input
+        className="input-search-range"
+        type="text"
+        placeholder="Hasta $"
+        value={priceRange.max === 0 ? "" : priceRange.max}
+        onChange={handleMaxChange}
+      />
+    </div>
+  );
+};
 
 export default PriceRangeFilter;

@@ -3,8 +3,8 @@ import Row from "react-bootstrap/Row";
 
 import SearchBar from "./SearchBar";
 import CategoryFilter from "./CategoryFilter";
+import PriceFilter from "./PriceFilter";     
 import PriceRangeFilter from "./PriceRangeFilter";
-import PriceFilter from "./PriceFilter";
 
 const FiltersBar = ({
   searchText,
@@ -12,14 +12,16 @@ const FiltersBar = ({
   categories,
   categoryFilter,
   setCategoryFilter,
+  // priceFilter,
+  // setPriceFilter,
   priceRange,
   setPriceRange,
   setCurrentPage
 }) => (
-  <Row className="filters-row mb-3" style={{ alignItems: "center" }}>
+  <Row className="filters-row mb-3 justify-content-start">
 
-    {/* BUSCAR PRODUCTO */}
-    <Col xs={12} md={4}>
+    {/* BUSCAR */}
+    <Col xs={12} md="auto">
       <SearchBar
         searchText={searchText}
         setSearchText={setSearchText}
@@ -28,7 +30,7 @@ const FiltersBar = ({
     </Col>
 
     {/* CATEGORÍA */}
-    <Col xs={12} md={4}>
+    <Col xs={12} md="auto">
       <CategoryFilter
         categories={categories}
         categoryFilter={categoryFilter}
@@ -37,18 +39,17 @@ const FiltersBar = ({
       />
     </Col>
 
-    {/* 
-    <Col xs={12} md={4}>
+    {/* PRECIO (SELECT) */}
+    {/* <Col xs={12} md="auto">
       <PriceFilter
         priceFilter={priceFilter}
         setPriceFilter={setPriceFilter}
         setCurrentPage={setCurrentPage}
       />
-    </Col>
-    */}
+    </Col> */}
 
     {/* RANGO DE PRECIOS */}
-    <Col xs={12} md={4}>
+    <Col xs={12} md="auto">
       <PriceRangeFilter
         priceRange={priceRange}
         setPriceRange={setPriceRange}

@@ -1,6 +1,30 @@
-.mx-auto{
+/*TABLA*/
+.table-responsive-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table-scroll table {
+  min-width: 700px;
+}
+
+html, body {
+  width: 100%;
+  overflow-x: hidden !important;
+}
+
+.table-wrapper {
   max-width: 1100px;
   width: 100%;
+  margin: 0 auto;
 }
 .header-table{
     color: #55873C !important;
@@ -19,15 +43,91 @@
   background-color: #44732E;
   color: #ffffff;
 }
+
+/*FILTROS*/
+.filter-input,
+.filter-select{
+  padding: 8px;
+  border: 1px solid #9CA3AF;
+  border-radius: 7px;
+}
+
+.input-search-range{
+  padding: 8px;
+  border: 1px solid #9CA3AF;
+  border-radius: 7px;
+  width: 100px;
+}
+
+.filter-select {
+  color: #374151 !important;
+}
+
+.filter-select option[value=""] {
+  color: #9CA3AF !important;
+}
+
+.filter-input:focus,
+.filter-select:focus,
+.input-search-range:focus{ 
+  outline: none;                 
+}
+
+.filter-range{
+  display: flex;
+  gap: 10px;
+}
+
+.filter-input,
+.filter-select,
+.filter-range input {
+  width: 100%;
+}
+
+.search-wrapper {
+  width: 100%;
+  position: relative;
+  display: block;
+}
+
+.search-wrapper input {
+  width: 100% !important;
+}
+
+@media (max-width: 767px) {
+  .filter-input,
+  .filter-select{
+    margin-bottom: 10px;
+  }
+  .filter-range {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .filter-range input {
+    width: 100%;
+    max-width: none;
+  }
+
+  .separator {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .filter-range input {
+    max-width: 100px;
+  }
+}
+
+
+
+/*PAGINACIÓN*/
+
 .pagination {
   margin-top: 15px;
   display: flex;
   gap: 8px;
-}
-.input-search{
-    padding: 8px;
-    border: 1px solid #9CA3AF;
-    border-radius: 10px;
 }
 .btn-pagination-active,
 .btn-pagination-active:hover{
@@ -48,4 +148,39 @@
 .btn-arrow:disabled{
   border-color: transparent !important;
   opacity: 50%;
+}
+
+.pagination-scroll {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  justify-content: center;
+}
+
+.pagination-scroll::-webkit-scrollbar {
+  height: 5px;
+}
+
+.pagination-scroll::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1; /* gris suave */
+  border-radius: 5px;
+}
+
+/* TOTALS */
+.row-totals {
+  width: 100%;
+  text-align: center;
+  margin: 15px 0;
+  font-weight: 600;
+  color: #374151;
+}
+
+@media (min-width: 768px) {
+  .row-totals {
+    text-align: left;
+    padding-left: 5px;
+  }
 }

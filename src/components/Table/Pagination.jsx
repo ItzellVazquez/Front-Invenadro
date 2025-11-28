@@ -35,7 +35,7 @@ const Pagination = ({
   return (
     <Row className="justify-content-center mt-3">
       <Col xs="12" className="text-center">
-        <div className="d-flex justify-content-center gap-2">
+        <div className="pagination-scroll">
 
           <button
             onClick={goToPreviousPage}

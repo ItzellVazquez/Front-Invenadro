@@ -1,6 +1,6 @@
 const Totals = ({ items }) => {
   return (
-    <div>
+    <div className="row-totals">
         {items} Productos
     </div>
 );
