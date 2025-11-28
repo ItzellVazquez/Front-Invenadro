@@ -4,6 +4,7 @@ import Row from "react-bootstrap/Row";
 import SearchBar from "./SearchBar";
 import CategoryFilter from "./CategoryFilter";
 import PriceRangeFilter from "./PriceRangeFilter";
+import PriceFilter from "./PriceFilter";
 
 const FiltersBar = ({
   searchText,
@@ -35,6 +36,16 @@ const FiltersBar = ({
         setCurrentPage={setCurrentPage}
       />
     </Col>
+
+    {/* 
+    <Col xs={12} md={4}>
+      <PriceFilter
+        priceFilter={priceFilter}
+        setPriceFilter={setPriceFilter}
+        setCurrentPage={setCurrentPage}
+      />
+    </Col>
+    */}
 
     {/* RANGO DE PRECIOS */}
     <Col xs={12} md={4}>

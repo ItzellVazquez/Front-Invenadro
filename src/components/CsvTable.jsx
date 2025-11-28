@@ -19,6 +19,7 @@ const CsvTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [customerData, setCustomerData] = useState({});
   const [categoryFilter, setCategoryFilter] = useState("");
+  // const [priceFilter, setPriceFilter] = useState("");
   const [priceRange, setPriceRange] = useState({ min: 0, max: 0 });
 
   const rowsPerPage = 10;
@@ -88,11 +89,22 @@ const CsvTable = () => {
 
     const numericPrice = Number(row["Precio $"].replace(/[^\d.-]+/g, ""));
 
+    // const matchesPrice =
+//   priceFilter === "" ||
+//   row["Precio $"].replace(/[^\d.-]+/g, "").startsWith(priceFilter);
+
+
     const matchesRange =
       (priceRange.min === 0 || numericPrice >= priceRange.min) &&
       (priceRange.max === 0 || numericPrice <= priceRange.max);
 
-    return matchesSearch && matchesCategory && matchesRange;
+      return (
+      matchesSearch &&
+      matchesCategory &&
+      // matchesPrice &&
+      matchesRange
+    );
+
   });
 
   const indexOfLastRow = currentPage * rowsPerPage;
@@ -122,16 +134,19 @@ const CsvTable = () => {
       {data.length > 0 && (
         <Container fluid className="p-3">
 
-          <FiltersBar
-            searchText={searchText}
-            setSearchText={setSearchText}
-            categories={categories}
-            categoryFilter={categoryFilter}
-            setCategoryFilter={setCategoryFilter}
-            priceRange={priceRange}
-            setPriceRange={setPriceRange}
-            setCurrentPage={setCurrentPage}
-          />
+        <FiltersBar
+          searchText={searchText}
+          setSearchText={setSearchText}
+          categories={categories}
+          categoryFilter={categoryFilter}
+          setCategoryFilter={setCategoryFilter}
+          priceRange={priceRange}
+          setPriceRange={setPriceRange}
+          setCurrentPage={setCurrentPage}
+
+          // priceFilter={priceFilter}
+          // setPriceFilter={setPriceFilter}
+        />
 
           <DataTable data={currentRows} />
 
