@@ -11,7 +11,7 @@ function App() {
     <Container fluid className="mt-5 p-3">
       <Row className="text-center align-items-center">
         <Col className="d-flex justify-content-start">
-          <img src="src/assets/InveNadro.svg" alt="InveNadro Logo" width="45" />
+          <img src="data/InveNadro.svg" alt="InveNadro Logo" width="45" />
         </Col>
 
         <Col className="d-flex justify-content-center">
@@ -19,7 +19,7 @@ function App() {
         </Col>
 
         <Col className="d-flex justify-content-end">
-          <img src="src/assets//textInveNadro.svg" alt="textInveNadro Logo" width="200" />
+          {/* <img src="data/textInveNadro.svg" alt="textInveNadro Logo" width="200" /> */}
         </Col>
       </Row>
     </Container>
