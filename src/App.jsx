@@ -19,7 +19,7 @@ function App() {
         </Col>
 
         <Col className="d-flex justify-content-end">
-          {/* <img src="data/textInveNadro.svg" alt="textInveNadro Logo" width="200" /> */}
+          <img src="data/textInveNgitadro.svg" alt="textInveNadro Logo" width="200" />
         </Col>
       </Row>
     </Container>
