@@ -11,6 +11,7 @@ import SearchBar from "./SearchBar";
 import DataTable from "./DataTable";
 import Totals from "./Totals";
 import Pagination from "./Pagination";
+import FiltersBar from "./Filters/FiltersBar";
 
 import "./TableStyles.css";
 
@@ -19,6 +20,10 @@ const CsvTable = () => {
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [customerData, setCustomerData] = useState({});
+  const [categoryFilter, setCategoryFilter] = useState("");
+  const [priceFilter, setPriceFilter] = useState("");
+  const [priceRange, setPriceRange] = useState({ min: 0, max: 0 });
+
   const rowsPerPage = 10;
 
   const allowedColumns = ["SKU", "Descripcion", "MATL_GRP_5", "Precio_Farmacia"];
@@ -31,7 +36,7 @@ const CsvTable = () => {
   };
 
   const processData = () => {
-    Papa.parse("/data/ShortDemo.csv", {
+    Papa.parse("/data/LongDemo.csv", {
       download: true,
       header: true,
       skipEmptyLines: true,
@@ -74,16 +79,34 @@ const CsvTable = () => {
     });
   };
 
-  const filteredData = data.filter(row =>
-    Object.values(row).some(value =>
-      value?.toString().toLowerCase().includes(searchText.toLowerCase())
-    )
-  );
+  const filteredData = data.filter(row => {
+    const matchesSearch =
+      Object.values(row).some(value =>
+        value?.toString().toLowerCase().includes(searchText.toLowerCase())
+      );
+
+    const matchesCategory =
+      categoryFilter === "" || row["Categoría"] === categoryFilter;
+
+    const matchesPrice =
+      priceFilter === "" || row["Precio $"]
+        .replace(/[^\d.-]+/g, "")
+        .startsWith(priceFilter);
+
+    const numericPrice = Number(row["Precio $"].replace(/[^\d.-]+/g, ""));
+    const matchesRange =
+      (priceRange.min === 0 || numericPrice >= priceRange.min) &&
+      (priceRange.max === 0 || numericPrice <= priceRange.max);
+
+    return matchesSearch && matchesCategory && matchesPrice && matchesRange;
+  });
 
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
   const currentRows = filteredData.slice(indexOfFirstRow, indexOfLastRow);
   const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+
+  const categories = [...new Set(data.map(item => item["Categoría"]))];
 
   return (
     <>
@@ -105,6 +128,19 @@ const CsvTable = () => {
             setSearchText={setSearchText}
             setCurrentPage={setCurrentPage}
           />
+
+          <FiltersBar
+            searchText={searchText}
+            setSearchText={setSearchText}
+            categories={categories}
+            categoryFilter={categoryFilter}
+            setCategoryFilter={setCategoryFilter}
+            priceFilter={priceFilter}
+            setPriceFilter={setPriceFilter}
+            priceRange={priceRange}
+            setPriceRange={setPriceRange}
+          />
+
 
           <DataTable data={currentRows} />
 

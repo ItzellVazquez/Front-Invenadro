@@ -38,6 +38,7 @@
 .btn-pagination-inactive,
   .btn-pagination-inactive :hover{
   color: #374151;
+  border-color: transparent !important;
 }
 .btn-arrow{
   background-color: #ffffff;
