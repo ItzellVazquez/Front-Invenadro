@@ -1,19 +1,17 @@
-import React, { useState } from "react";
 import Papa from "papaparse";
+import { useEffect, useState } from "react";
 
 import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 
-import CustomerInfo from "./CustomerInfo";
-import ProcessButton from "./ProcessButton";
-import SearchBar from "./SearchBar";
-import DataTable from "./DataTable";
-import Totals from "./Totals";
-import Pagination from "./Pagination";
+import CustomerInfo from "./Table/CustomerInfo";
 import FiltersBar from "./Filters/FiltersBar";
+import DataTable from "./Table/DataTable";
+import Pagination from "./Table/Pagination";
+import ProcessButton from "./Table/ProcessButton";
+import Totals from "./Table/Totals";
 
-import "./TableStyles.css";
+
+import "./Table/TableStyles.css";
 
 const CsvTable = () => {
   const [data, setData] = useState([]);
@@ -21,7 +19,6 @@ const CsvTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [customerData, setCustomerData] = useState({});
   const [categoryFilter, setCategoryFilter] = useState("");
-  const [priceFilter, setPriceFilter] = useState("");
   const [priceRange, setPriceRange] = useState({ min: 0, max: 0 });
 
   const rowsPerPage = 10;
@@ -32,7 +29,7 @@ const CsvTable = () => {
     SKU: "EAN",
     Descripcion: "Descripción",
     MATL_GRP_5: "Categoría",
-    Precio_Farmacia: "Precio $"
+    Precio_Farmacia: "Precio $",
   };
 
   const processData = () => {
@@ -41,19 +38,18 @@ const CsvTable = () => {
       header: true,
       skipEmptyLines: true,
       complete: (results) => {
-        setCustomerData(prev => ({
-          ...prev,
+        setCustomerData({
           customerId: results.data[0].CFG_CLIENTE_SAP,
           date: new Date(
             `${results.data[0].CALDAY.toString().slice(0, 4)}-${results.data[0].CALDAY.toString().slice(4, 6)}-${results.data[0].CALDAY.toString().slice(6, 8)}`
           ).toLocaleDateString("es-MX", {
             day: "numeric",
             month: "long",
-            year: "numeric"
-          })
-        }));
+            year: "numeric",
+          }),
+        });
 
-        const trimmedData = results.data.map(row =>
+        const trimmedData = results.data.map((row) =>
           allowedColumns.reduce((acc, col) => {
             const newKey = columnMap[col] || col;
             let value = row[col];
@@ -64,7 +60,7 @@ const CsvTable = () => {
                 ? new Intl.NumberFormat("es-MX", {
                     style: "currency",
                     currency: "MXN",
-                    minimumFractionDigits: 2
+                    minimumFractionDigits: 2,
                   }).format(num)
                 : "$0.00";
             }
@@ -75,30 +71,28 @@ const CsvTable = () => {
         );
 
         setData(trimmedData);
-      }
+      },
     });
   };
 
-  const filteredData = data.filter(row => {
-    const matchesSearch =
-      Object.values(row).some(value =>
-        value?.toString().toLowerCase().includes(searchText.toLowerCase())
-      );
+  // ----------------------------
+  // FILTROS
+  // ----------------------------
+  const filteredData = data.filter((row) => {
+    const matchesSearch = Object.values(row).some((value) =>
+      value?.toString().toLowerCase().includes(searchText.toLowerCase())
+    );
 
     const matchesCategory =
       categoryFilter === "" || row["Categoría"] === categoryFilter;
 
-    const matchesPrice =
-      priceFilter === "" || row["Precio $"]
-        .replace(/[^\d.-]+/g, "")
-        .startsWith(priceFilter);
-
     const numericPrice = Number(row["Precio $"].replace(/[^\d.-]+/g, ""));
+
     const matchesRange =
       (priceRange.min === 0 || numericPrice >= priceRange.min) &&
       (priceRange.max === 0 || numericPrice <= priceRange.max);
 
-    return matchesSearch && matchesCategory && matchesPrice && matchesRange;
+    return matchesSearch && matchesCategory && matchesRange;
   });
 
   const indexOfLastRow = currentPage * rowsPerPage;
@@ -106,28 +100,27 @@ const CsvTable = () => {
   const currentRows = filteredData.slice(indexOfFirstRow, indexOfLastRow);
   const totalPages = Math.ceil(filteredData.length / rowsPerPage);
 
-  const categories = [...new Set(data.map(item => item["Categoría"]))];
+  const categories = [...new Set(data.map((item) => item["Categoría"]))];
+
+  // ----------------------------
+  // FIX: SI UNA PÁGINA NO EXISTE → REGRESA A 1
+  // ----------------------------
+  useEffect(() => {
+    if (currentPage > totalPages && totalPages > 0) {
+      setCurrentPage(1);
+    }
+  }, [currentPage, totalPages]);
+
 
   return (
     <>
       <Container fluid className="mt-3">
-
-        {data.length > 0 && (
-          <CustomerInfo customerData={customerData} />
-        )}
-
+        {data.length > 0 && <CustomerInfo customerData={customerData} />}
         <ProcessButton processData={processData} />
-
       </Container>
 
       {data.length > 0 && (
         <Container fluid className="p-3">
-
-          <SearchBar
-            searchText={searchText}
-            setSearchText={setSearchText}
-            setCurrentPage={setCurrentPage}
-          />
 
           <FiltersBar
             searchText={searchText}
@@ -135,12 +128,10 @@ const CsvTable = () => {
             categories={categories}
             categoryFilter={categoryFilter}
             setCategoryFilter={setCategoryFilter}
-            priceFilter={priceFilter}
-            setPriceFilter={setPriceFilter}
             priceRange={priceRange}
             setPriceRange={setPriceRange}
+            setCurrentPage={setCurrentPage}
           />
-
 
           <DataTable data={currentRows} />
 
@@ -149,8 +140,8 @@ const CsvTable = () => {
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
-            goToPreviousPage={() => setCurrentPage(prev => prev - 1)}
-            goToNextPage={() => setCurrentPage(prev => prev + 1)}
+            goToPreviousPage={() => setCurrentPage((prev) => prev - 1)}
+            goToNextPage={() => setCurrentPage((prev) => prev + 1)}
             setCurrentPage={setCurrentPage}
           />
         </Container>

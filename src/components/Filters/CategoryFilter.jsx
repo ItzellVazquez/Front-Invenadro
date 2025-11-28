@@ -1,8 +1,11 @@
-const CategoryFilter = ({ categories, categoryFilter, setCategoryFilter }) => (
+const CategoryFilter = ({ categories, categoryFilter, setCategoryFilter, setCurrentPage }) => (
   <select
     className="filter-select"
     value={categoryFilter}
-    onChange={(e) => setCategoryFilter(e.target.value)}
+    onChange={(e) => {
+      setCategoryFilter(e.target.value);
+      setCurrentPage(1);
+    }}
   >
     <option value="">Categoría</option>
     {categories.map((cat, i) => (

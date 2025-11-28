@@ -1,6 +1,6 @@
-import Table from "react-bootstrap/Table";
-import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
+import Table from "react-bootstrap/Table";
 
 const DataTable = ({ data }) => (
   <Row className="justify-content-center">
