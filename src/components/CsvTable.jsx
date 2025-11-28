@@ -9,6 +9,7 @@ import CustomerInfo from "./CustomerInfo";
 import ProcessButton from "./ProcessButton";
 import SearchBar from "./SearchBar";
 import DataTable from "./DataTable";
+import Totals from "./Totals";
 import Pagination from "./Pagination";
 
 import "./TableStyles.css";
@@ -106,6 +107,8 @@ const CsvTable = () => {
           />
 
           <DataTable data={currentRows} />
+
+          <Totals items={filteredData.length} />
 
           <Pagination
             currentPage={currentPage}
